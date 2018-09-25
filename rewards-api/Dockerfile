@@ -1,15 +1,12 @@
-FROM node:8.11.4-alpine
+FROM node:10.1.0
 
-WORKDIR /app
-
-COPY ./package.json .
-COPY ./yarn.lock .
-RUN yarn install
-COPY ./index.js .
-COPY ./server.js .
-COPY ./app ./app
-COPY ./database ./database
-
-EXPOSE 3000
-
-ENTRYPOINT [ "yarn" ]
+ADD ./ /app
+WORKDIR /app/rewards-api
+RUN npm install
+RUN npm i -g nodemon
+RUN npm i -g knex
+RUN npm install yarn
+RUN cp .env.example .env
+#RUN yarn migrate
+EXPOSE 4000
+CMD ["npm", "start"]
