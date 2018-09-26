@@ -45,13 +45,37 @@ class RedeemPage extends Component {
     const { handleSubmit } = this.props;
     return(
       <div>
-        <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
-          firstName <Field component="input" type="text" name="firstName" required/>
-          lastName <Field component="input" type="text" name="lastName" required/>
-          mobileNumber <Field component="input" type="text" name="mobileNumber" required/>
-          Upload <input type="file" onChange={this.handleFileUpload} required/>
-          <button type="submit"> submit </button>
-        </form>
+        <div className="container">
+          <div className="row">
+            <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
+              <div className="col-md-12">
+                <div className="col-md-3">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <Field component="input" className="form-control" type="text" name="firstName" required/>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <label>Last Name</label>
+                  <Field component="input" className="form-control" type="text" name="lastName" required/>
+                </div>
+                <div className="col-md-3">
+                  <label>Mobile Number</label>
+                  <Field component="input" className="form-control" type="text" name="mobileNumber" required/>
+                </div>
+                <div className="col-md-3">
+                  <div class="form-group">
+                    <label>Upload</label>
+                    <input type="file" class="form-control-file" onChange={this.handleFileUpload}/>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <center><button type="submit" className="btn btn-primary"> Submit </button></center>
+              </div> 
+            </form>
+          </div>
+        </div>
       </div>
     )
   }

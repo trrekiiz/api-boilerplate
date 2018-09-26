@@ -39,10 +39,12 @@ export default function (state = {}, action = {} ) {
 }
 
 export function createUserTransaction(values,link){
+  const generateId =  Math.random().toString(36).substr(2, 9);
   const data = {
     ...values,
     status: `Waiting`,
-    imageLink : link
+    imageLink : link,
+    referenceNunber: generateId
   };
   return{
     type: CREATE_USER_TRANSACTIONS,
