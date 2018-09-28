@@ -68,11 +68,21 @@ export const get = async (req, res) => {
 };
 
 export const update = async (req, res) => {
-  console.log("Hello this is update");
-  const result = {
-    message: `this patch endpoint`
-  };
-  return res.status(200).json(result)
+  const id = req.params.id;
+  const body = req.body;
+  const newBody = _.omit(body, ['profile_id', 'created_at', 'updated_at']);
+
+  try {
+    const model = await TransactionsModel.where('id', id).fetch({ require: true });
+    model.set(newBody);
+    await model.save();
+    return res.status(200).json(model)
+  } catch (error) {
+    if (error.message === 'EmptyResponse') {
+      return res.status(NOT_FOUND.code).json(NOT_FOUND)
+    }
+    return handleError(res, error)
+  }
 };
 
 export const getById = async (req, res) => {

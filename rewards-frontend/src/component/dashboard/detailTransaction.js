@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {getUserTransactionById} from '../../ducks/userDashboard';
-import _ from 'lodash';
 
 class RedeemPage extends Component {
 
@@ -14,7 +13,7 @@ class RedeemPage extends Component {
     console.log(this.props.userDashboard);
     return(
       <div className="container">
-        <table class="table table-striped">
+        {/* <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">id</th>
@@ -30,18 +29,50 @@ class RedeemPage extends Component {
         </thead>
         <tbody>
           <tr>
-            <td scope="col">{this.props.userDashboard.id}</td>
-            <td scope="col">{this.props.userDashboard.firstName} {this.props.userDashboard.lastName}</td>
-            <td scope="col">{this.props.userDashboard.mobileNumber}</td>
-            <td scope="col"><img src={this.props.userDashboard.imageLink} width="300"/></td>
-            <td scope="col">{this.props.userDashboard.created_at}</td>
-            <td scope="col">{this.props.userDashboard.status}</td>
-            <td scope="col">{this.props.userDashboard.receiptNumber}</td>
-            <td scope="col">{this.props.userDashboard.branchId}</td>
-            <td scope="col">{this.props.userDashboard.referenceNunber}</td>
+            <td>{this.props.userDashboard.id}</td>
+            <td>{this.props.userDashboard.firstName} {this.props.userDashboard.lastName}</td>
+            <td>{this.props.userDashboard.mobileNumber}</td>
+            <td><img src={this.props.userDashboard.imageLink} width="300"/></td>
+            <td>{this.props.userDashboard.created_at}</td>
+            <td>{this.props.userDashboard.status}</td>
+            <td>{this.props.userDashboard.receiptNumber}</td>
+            <td>{this.props.userDashboard.branchId}</td>
+            <td>{this.props.userDashboard.referenceNunber}</td>
           </tr>
         </tbody>
-        </table>
+        </table> */}
+        <div className="row">
+          <div className="col-md-6">
+            <img src={this.props.userDashboard.imageLink} alt={this.props.userDashboard.id} width="500"/>
+          </div>
+          <div className="col-md-6">
+            <div class="col-md-12">
+              <label>Name</label>
+              <input className="form-control" type="text" value={`${this.props.userDashboard.firstName} ${this.props.userDashboard.lastName}`}/>
+            </div>
+            <div class="col-md-12">
+              <label>mobileNumber</label>
+              <input className="form-control" type="text" value={this.props.userDashboard.mobileNumber}/>
+            </div>
+            <div class="col-md-12">
+              <label>Date</label>
+              <input className="form-control" type="text" value={this.props.userDashboard.created_at}/>
+            </div>
+            <div class="col-md-12">
+              <label>receiptNumber</label>
+              <input className="form-control" type="text" value={this.props.userDashboard.receiptNumber}/>
+            </div>
+            <div class="col-md-12">
+              <label>branchId</label>
+              <input className="form-control" type="text" value={this.props.userDashboard.branchId}/>
+            </div>
+            <div class="col-md-12">
+              <label>status</label>
+              <input className="form-control" type="text" value={this.props.userDashboard.status}/>
+            </div>
+          </div>
+        </div>
+        
         <center><button type="submit" className="btn btn-success"> Approve </button> <button type="submit" className="btn btn-danger"> Reject </button> <button type="submit" className="btn btn-primary"> Back </button></center>
       </div>
     )

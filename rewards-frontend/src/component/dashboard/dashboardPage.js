@@ -27,12 +27,12 @@ class RedeemPage extends Component {
         <table class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">name</th>
-            <th scope="col">mobileNumber</th>
-            <th scope="col">imageLink</th>
-            <th scope="col">created_at</th>
-            <th scope="col">status</th>
+            <th>#</th>
+            <th>name</th>
+            <th>mobileNumber</th>
+            <th>imageLink</th>
+            <th>created_at</th>
+            <th>status</th>
           </tr>
         </thead>
         <tbody>
