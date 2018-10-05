@@ -1,22 +1,9 @@
-FROM node:8.11.4-alpine
+FROM node:10.1.0
 
-WORKDIR /app
-
-COPY ./package.json .
-COPY ./yarn.lock .
-RUN yarn install
-
-COPY ./.babelrc .
-COPY ./next.config.js .
-COPY ./components ./components
-COPY ./config ./config
-COPY ./pages ./pages
-COPY ./redux ./redux
-COPY ./tools ./tools
-RUN yarn build
-COPY ./server ./server
-COPY ./static ./static
+ADD ./ /app
+WORKDIR /app/rewards-frontend
+RUN npm install
+RUN cp .env.example .env
+#RUN yarn migrate
 EXPOSE 3000
-
-ENTRYPOINT [ "yarn" ]
-CMD [ "start" ]
+CMD ["npm", "start"]

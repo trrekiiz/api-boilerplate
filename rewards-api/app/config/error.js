@@ -15,3 +15,9 @@ export const REQUIRED = {
   error: 'กรอกข้อมูลไม่ครบ',
   message: 'กรุณากรอก [...]',
 };
+
+export const UNAUTHORIZED = {
+  code: 401,
+  error: 'unauthorized',
+  message: 'กรุณาลองใหม่อีกครั้งในภายหลัง',
+};

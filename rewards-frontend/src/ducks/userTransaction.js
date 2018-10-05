@@ -38,8 +38,7 @@ export default function (state = {}, action = {} ) {
   }
 }
 
-export function createUserTransaction(values,link){
-  const generateId =  Math.random().toString(36).substr(2, 9);
+export function createUserTransaction(values,link,generateId){
   const data = {
     ...values,
     status: `Waiting`,

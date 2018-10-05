@@ -5,6 +5,7 @@ import * as actions from '../../ducks/userTransaction';
 import Swal from 'sweetalert2'
 import { reduxForm , Field } from 'redux-form';
 
+const generateId =  Math.random().toString(36).substr(2, 9);
 class RedeemPage extends Component {
 
   onSubmit(values) {
@@ -18,7 +19,7 @@ class RedeemPage extends Component {
           'error'
         )
       }else{
-        this.props.createUserTransaction(values,res.payload.data.Location).then(res=>{
+        this.props.createUserTransaction(values,res.payload.data.Location,generateId).then(res=>{
           if(res.error){
             Swal(
               'มีบางอย่างผิดพลาด',
@@ -28,7 +29,7 @@ class RedeemPage extends Component {
           }else{
             Swal(
               'บันทึกข้อมูลเรียบร้อยแล้ว',
-              'กรุณารอการตรวจสอบจากพนักงาน หากข้อมูลถูกต้องทางเราจะส่งส่วนลดไปทางเบอร์โทรศัพท์',
+              `กรุณารอการตรวจสอบจากพนักงาน หากข้อมูลถูกต้องทางเราจะส่งส่วนลดไปทางเบอร์โทรศัพท์ (ref : ${generateId})`,
               'success'
             )
           }
@@ -49,24 +50,24 @@ class RedeemPage extends Component {
           <div className="row">
             <form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
               <div className="col-md-12">
-                <div className="col-md-3">
-                  <div class="form-group">
+                <div className="col-md-12">
+                  <div className="form-group">
                     <label>First Name</label>
                     <Field component="input" className="form-control" type="text" name="firstName" required/>
                   </div>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-12">
                   <label>Last Name</label>
                   <Field component="input" className="form-control" type="text" name="lastName" required/>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-12">
                   <label>Mobile Number</label>
                   <Field component="input" className="form-control" type="text" name="mobileNumber" required/>
                 </div>
-                <div className="col-md-3">
-                  <div class="form-group">
+                <div className="col-md-12">
+                  <div className="form-group">
                     <label>Upload</label>
-                    <input type="file" class="form-control-file" onChange={this.handleFileUpload}/>
+                    <input type="file" className="form-control-file" onChange={this.handleFileUpload}/>
                   </div>
                 </div>
               </div>

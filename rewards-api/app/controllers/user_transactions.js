@@ -70,20 +70,20 @@ export const get = async (req, res) => {
 export const update = async (req, res) => {
   const id = req.params.id;
   const body = req.body;
-  const newBody = _.omit(body, ['profile_id', 'created_at', 'updated_at']);
-
+  console.log(id, body);
   try {
     const model = await TransactionsModel.where('id', id).fetch({ require: true });
-    model.set(newBody);
+    model.set(body);
     await model.save();
     return res.status(200).json(model)
   } catch (error) {
     if (error.message === 'EmptyResponse') {
-      return res.status(NOT_FOUND.code).json(NOT_FOUND)
+      return res.status(200).json(NOT_FOUND)
     }
     return handleError(res, error)
   }
 };
+
 
 export const getById = async (req, res) => {
   const id = req.params.id;

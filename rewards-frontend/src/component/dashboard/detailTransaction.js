@@ -1,79 +1,103 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {getUserTransactionById} from '../../ducks/userDashboard';
+import * as actions from '../../ducks/userDashboard';
+import Swal from 'sweetalert2';
 
 class RedeemPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      receiptNumber : this.props.userDashboard.receiptNumber,
+      branchId : this.props.userDashboard.branchId
+    };
+  }
 
   componentDidMount(){
-    const id  = this.props.match.params.id
-    this.props.dispatch(getUserTransactionById(id)).then(res=>{console.log(res)})
+    const id  = this.props.match.params.id;
+    this.props.getUserTransactionById(id).then(res=>{console.log(res)})
+  };
+
+  onApprove = () => {
+    const id  = this.props.match.params.id;
+    this.props.updateUserTransactionById(id,"Approve", this.state.receiptNumber, this.state.branchId).then((res)=>{
+      if(res.error){
+        Swal(
+          'มีบางอย่างผิดพลาด เลขสัญญาอาจจะซ้ำ',
+          'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+          'error'
+        );
+      }else if(res.payload.status === 200){
+        Swal(
+          'บันทึกข้อมูลเรียบร้อยแล้ว',
+          'ข้อมูลที่ท่านบันทึกจะอยู่ในระบบของเรา',
+          'success'
+        );
+        setTimeout(function(){window.location.replace(`/dashboard`)}, 2000)
+      }
+    })
+  };
+
+  onReject = () => {
+    const id  = this.props.match.params.id;
+    this.props.updateUserTransactionById(id,"Reject").then((res)=>{
+      if(res.error){
+        Swal(
+          'มีบางอย่างผิดพลาด เลขสัญญาอาจจะซ้ำ',
+          'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+          'error'
+        );
+      }else if(res.payload.status === 200){
+        Swal(
+          'บันทึกข้อมูลเรียบร้อยแล้ว',
+          'ข้อมูลที่ท่านบันทึกจะอยู่ในระบบของเรา',
+          'success'
+        );
+        setTimeout(function(){window.location.replace(`/dashboard`)}, 2000)
+      }
+    })
   };
 
   render() {
-    console.log(this.props.userDashboard);
+    console.log(this.props.userDashboard , this.state);
     return(
       <div className="container">
-        {/* <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">name</th>
-            <th scope="col">mobileNumber</th>
-            <th scope="col">imageLink</th>
-            <th scope="col">created_at</th>
-            <th scope="col">status</th>
-            <th scope="col">receiptNumber</th>
-            <th scope="col">branchId</th>
-            <th scope="col">referenceNunber</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{this.props.userDashboard.id}</td>
-            <td>{this.props.userDashboard.firstName} {this.props.userDashboard.lastName}</td>
-            <td>{this.props.userDashboard.mobileNumber}</td>
-            <td><img src={this.props.userDashboard.imageLink} width="300"/></td>
-            <td>{this.props.userDashboard.created_at}</td>
-            <td>{this.props.userDashboard.status}</td>
-            <td>{this.props.userDashboard.receiptNumber}</td>
-            <td>{this.props.userDashboard.branchId}</td>
-            <td>{this.props.userDashboard.referenceNunber}</td>
-          </tr>
-        </tbody>
-        </table> */}
         <div className="row">
           <div className="col-md-6">
             <img src={this.props.userDashboard.imageLink} alt={this.props.userDashboard.id} width="500"/>
           </div>
           <div className="col-md-6">
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>Name</label>
               <input className="form-control" type="text" value={`${this.props.userDashboard.firstName} ${this.props.userDashboard.lastName}`}/>
             </div>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>mobileNumber</label>
               <input className="form-control" type="text" value={this.props.userDashboard.mobileNumber}/>
             </div>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>Date</label>
               <input className="form-control" type="text" value={this.props.userDashboard.created_at}/>
             </div>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>receiptNumber</label>
-              <input className="form-control" type="text" value={this.props.userDashboard.receiptNumber}/>
+              <input className="form-control" type="text" value={this.props.userDashboard.receiptNumber} onChange={ e => {this.setState({receiptNumber:e.target.value})}}/>
             </div>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>branchId</label>
-              <input className="form-control" type="text" value={this.props.userDashboard.branchId}/>
+              <input className="form-control" type="text" value={this.props.userDashboard.branchId} onChange={ e => {this.setState({branchId :e.target.value})}}/>
             </div>
-            <div class="col-md-12">
+            <div className="col-md-12">
               <label>status</label>
               <input className="form-control" type="text" value={this.props.userDashboard.status}/>
             </div>
           </div>
         </div>
         
-        <center><button type="submit" className="btn btn-success"> Approve </button> <button type="submit" className="btn btn-danger"> Reject </button> <button type="submit" className="btn btn-primary"> Back </button></center>
+        <center>
+          <button type="button" className="btn btn-success" onClick={this.onApprove}> Approve </button>
+          <button type="button" className="btn btn-danger" onClick={this.onReject}> Reject </button>
+          <button type="button" className="btn btn-primary"> Back </button>
+        </center>
       </div>
     )
   }
@@ -83,4 +107,4 @@ const mapStateToProps = (userDashboard) =>{
   return userDashboard;
 };
 
-export default connect(mapStateToProps,null)(RedeemPage)
+export default connect(mapStateToProps,actions)(RedeemPage)

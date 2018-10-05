@@ -8,7 +8,7 @@ exports.up = function (knex, Promise) {
     table.string('branchId', 20);
     table.string('status', 20).notNullable();
     table.string('referenceNumber', 20);
-    table.string('imageLink', 20).notNullable();
+    table.string('imageLink', 255).notNullable();
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
     table.timestamp('updated_at').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
   })

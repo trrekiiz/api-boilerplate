@@ -18,13 +18,13 @@ class RedeemPage extends Component {
       <td>{_item.created_at}</td>
       <td>{_item.status}</td>
     </tr>
-)
+);
 
   render() {
     console.log(this.props.userDashboard);
     return(
       <div className="container">
-        <table class="table table-striped">
+        <table className="table table-striped">
         <thead>
           <tr>
             <th>#</th>

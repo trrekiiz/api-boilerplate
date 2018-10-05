@@ -23,7 +23,7 @@ services:
       MYSQL_USER: nivea_database
       MYSQL_PASSWORD: mbx12345
       MYSQL_ROOT_PASSWORD: mbx12345
-  app:
+  api:
     container_name: nivea-api
     image: nivea-api
     build:

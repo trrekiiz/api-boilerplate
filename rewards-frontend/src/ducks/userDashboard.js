@@ -1,9 +1,12 @@
 export const FETCH_ALL_USER_TRANSACTION = "FETCH_ALL_USER_TRANSACTION";
 export const FETCH_ALL_USER_TRANSACTION_SUCCESS = "FETCH_ALL_USER_TRANSACTION_SUCCESS";
 export const FETCH_ALL_USER_TRANSACTION_FAIL = "FETCH_ALL_USER_TRANSACTION_FAIL";
-export const FETCH_TRANSACTION_BY_ID = "FETCH_TRANSACTION_BY_ID"
-export const FETCH_TRANSACTION_BY_ID_SUCCESS = "FETCH_TRANSACTION_BY_ID_SUCCESS"
-export const FETCH_TRANSACTION_BY_ID_FAIL = "FETCH_TRANSACTION_BY_ID_FAIL" 
+export const FETCH_TRANSACTION_BY_ID = "FETCH_TRANSACTION_BY_ID";
+export const FETCH_TRANSACTION_BY_ID_SUCCESS = "FETCH_TRANSACTION_BY_ID_SUCCESS";
+export const FETCH_TRANSACTION_BY_ID_FAIL = "FETCH_TRANSACTION_BY_ID_FAIL";
+export const UPDATE_USER_TRANSACTION = "UPDATE_USER_TRANSACTION";
+export const UPDATE_USER_TRANSACTION_SUCCESS = "UPDATE_USER_TRANSACTION_SUCCESS";
+export const UPDATE_USER_TRANSACTION_FAIL = "UPDATE_USER_TRANSACTION_FAIL";
 
 export default function (state = {}, action = {} ) {
   console.log(action.type);
@@ -41,6 +44,19 @@ export default function (state = {}, action = {} ) {
       return ({
         message: `fail ${action.error}`
       });
+    case UPDATE_USER_TRANSACTION:
+      return ({
+        ...state, loading:true
+      });
+    case UPDATE_USER_TRANSACTION_SUCCESS:
+      return ({
+        message: `success`,
+        loading: false
+      });
+    case UPDATE_USER_TRANSACTION_FAIL:
+      return ({
+        message: `fail ${action.error}`
+      });
     default:
       return state;
   }
@@ -67,6 +83,25 @@ export function getUserTransactionById(id){
       request: {
         url: `${process.env.REACT_APP_API_USER_TRANSACTIONS}/${id}`,
         method: 'GET'
+      }
+    }
+  }
+}
+
+export function updateUserTransactionById(id, value, receiptNumber, branchId){
+  const data = {
+    status: value,
+    branchId : branchId,
+    receiptNumber : receiptNumber
+  };
+  return{
+    type: UPDATE_USER_TRANSACTION,
+    payload: {
+      client: 'default',
+      request: {
+        url: `${process.env.REACT_APP_API_USER_TRANSACTIONS}/${id}`,
+        method: 'PATCH',
+        data: data
       }
     }
   }

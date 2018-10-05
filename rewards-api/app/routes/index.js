@@ -1,5 +1,6 @@
 import express from 'express';
 import userTransactions from './user_transactions';
+import userAdmin from './admin';
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/user_transactions', userTransactions);
+router.use('/user_admin', userAdmin);
 
 // Generate 404s
 router.use((req, res, next) => {
