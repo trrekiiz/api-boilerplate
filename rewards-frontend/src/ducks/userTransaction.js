@@ -30,6 +30,7 @@ export default function (state = {}, action = {} ) {
         loading: false
       });
     case PHOTO_TRANSACTIONS_FAIL:
+      console.log(action);
       return ({
         message: `fail ${action.error}`
       });
@@ -43,7 +44,7 @@ export function createUserTransaction(values,link,generateId){
     ...values,
     status: `Waiting`,
     imageLink : link,
-    referenceNunber: generateId
+    referenceNumber: generateId
   };
   return{
     type: CREATE_USER_TRANSACTIONS,
@@ -59,6 +60,7 @@ export function createUserTransaction(values,link,generateId){
 }
 
 export function uploadPhotoTransaction(data){
+  console.log(data);
   return{
     type: PHOTO_TRANSACTIONS,
     payload: {
@@ -68,7 +70,10 @@ export function uploadPhotoTransaction(data){
         method: 'POST',
         data: data,
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+          'Authorization': `JWT ${localStorage.getItem('token')}`
         }
       }
     }

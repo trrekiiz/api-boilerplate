@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {getAllUserTransaction} from '../../ducks/userDashboard';
 import _ from 'lodash';
+import requireAuth from '../requireAuth';
+import ExifOrientationImg from 'react-exif-orientation-img';
 
 class RedeemPage extends Component {
 
@@ -14,7 +16,7 @@ class RedeemPage extends Component {
       <td><a href={`dashboard/edit/${_item.id}`}>{_item.id}</a></td>
       <td>{_item.firstName} {_item.lastName}</td>
       <td>{_item.mobileNumber}</td>
-      <td><img src={_item.imageLink} alt={_item.id} width="200"/></td>
+      <td><ExifOrientationImg src={_item.imageLink} alt={_item.id} width="200"/></td>
       <td>{_item.created_at}</td>
       <td>{_item.status}</td>
     </tr>
@@ -24,6 +26,7 @@ class RedeemPage extends Component {
     console.log(this.props.userDashboard);
     return(
       <div className="container">
+        <div>Login By : {localStorage.getItem('name')} </div>
         <table className="table table-striped">
         <thead>
           <tr>
@@ -52,4 +55,4 @@ const mapDispatchToProps = (dispatch) => ({
   getAllUserTransaction: () => dispatch(getAllUserTransaction())
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(RedeemPage)
+export default requireAuth(connect(mapStateToProps,mapDispatchToProps)(RedeemPage))

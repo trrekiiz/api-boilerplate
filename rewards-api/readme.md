@@ -16,3 +16,7 @@ cp .env.example .env
 ```
 yarn migrate
 ```
+- Seed data into table 
+```
+yarn seed
+```

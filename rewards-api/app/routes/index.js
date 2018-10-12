@@ -1,15 +1,23 @@
 import express from 'express';
 import userTransactions from './user_transactions';
 import userAdmin from './admin';
+import enrollments from './enrollments';
+import redeem from './redeemcodes';
+import cors from 'cors'
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send({ date: new Date() })
+  res.send({ date: new Date() });
 });
 
-router.use('/user_transactions', userTransactions);
+
+router.use('/user_transactions', userTransactions , (req, res) => {
+  res.send({ user: `user_transaction` });
+});
 router.use('/user_admin', userAdmin);
+router.use('/enroll' , enrollments);
+router.use('/redeem' , redeem);
 
 // Generate 404s
 router.use((req, res, next) => {
@@ -30,5 +38,6 @@ router.use((err, req, res) => {
     error: err.stack,
   })
 });
+
 
 export default router

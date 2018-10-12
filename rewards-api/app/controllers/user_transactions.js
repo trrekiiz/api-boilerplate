@@ -49,7 +49,7 @@ export const create = async (req, res) => {
 };
 
 export const get = async (req, res) => {
-  let { where, offset, limit, order } = req.query;
+  let { where, offset, limit } = req.query;
   try {
     const data = await TransactionsModel
       .where(where ? JSON.parse(where) : defaultWhere)
@@ -57,9 +57,7 @@ export const get = async (req, res) => {
         qb.offset(offset ? +offset : defaultOffset)
           .limit(limit ? +limit : defaultLimit)
       })
-      .orderBy(
-        order ? order[0] : defaultOrderDesc[0],
-        order ? _.toUpper(order[1]) : defaultOrderDesc[1])
+      .orderBy('status' , 'DESC')
       .fetchAll();
     return res.status(200).json(data)
   } catch (error) {
@@ -97,6 +95,17 @@ export const getById = async (req, res) => {
   }
 };
 
+export const getNumberOfApprove = async(req, res) => {
+  try {
+    const data = await TransactionsModel
+      .where('status', 'Approve')
+      .count();
+    return res.status(200).json(data)
+  } catch (error) {
+    return handleError(res, error)
+  }
+};
+
 const uploadFile = (buffer, name, type) => {
   const params = {
     ACL: 'public-read',
@@ -108,19 +117,21 @@ const uploadFile = (buffer, name, type) => {
   return s3.upload(params).promise();
 };
 
-export const uploadPhoto = async(req, res) =>{
+export const uploadPhoto = async(req, res) => {
   const form = new multiparty.Form();
   form.parse(req, async (error, fields, files) => {
     if (error) throw new Error(error);
     try {
-      const path = files.file[0].path;
+      const path = files.image[0].path;
       const buffer = fs.readFileSync(path);
       const type = fileType(buffer);
       const timestamp = Date.now().toString();
       const fileName = `bucketFolder/${timestamp}-lg`;
       const data = await uploadFile(buffer, fileName, type);
       return res.status(200).send(data);
-    } catch (error) {
+    }
+    catch (error) {
+      console.log(error);
       return res.status(400).send(error);
     }
   });

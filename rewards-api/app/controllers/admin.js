@@ -50,7 +50,10 @@ export const signIn = async (req, res) => {
     else if(data){
         if (bcrypt.compareSync(req.body.password,data.get('password'))) {
           let token = jwt.sign({ username: data.get('username'), id: data.get('id')}, 'RESTFULAPIs');
-          return res.status(200).json({token: token});
+          return res.status(200).json({
+            token: token,
+            name : data.get('aliasName')
+          });
         }
         else {
           return handleError(res, error)

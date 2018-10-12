@@ -3,7 +3,6 @@ exports.up = function (knex, Promise) {
     table.increments('id');
     table.string('transactionId', 255).notNullable();
     table.string('redeemId', 255).notNullable();
-    table.string('adminId', 20).notNullable();
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
     table.timestamp('updated_at').notNullable().defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
   })

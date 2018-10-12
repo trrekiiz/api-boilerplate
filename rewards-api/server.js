@@ -2,7 +2,6 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import helmet from 'helmet'
-
 import morgan from 'morgan'
 import logger from './app/lib/logger'
 
@@ -26,7 +25,7 @@ app.listen(process.env.PORT || 3000, err => {
   if (err) throw new Error(err);
 
   logger.info(`> express server is running on http://localhost:${process.env.PORT || 3000}`)
-})
+});
 
 app.use('*', (req, res, next) => {
   const err = new Error('Not Found');

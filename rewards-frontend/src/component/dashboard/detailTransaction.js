@@ -2,39 +2,87 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../ducks/userDashboard';
 import Swal from 'sweetalert2';
+import requireAuth from '../requireAuth';
+import ExifOrientationImg from 'react-exif-orientation-img';
 
 class RedeemPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       receiptNumber : this.props.userDashboard.receiptNumber,
-      branchId : this.props.userDashboard.branchId
+      branchId : this.props.userDashboard.branchId,
+      mobileNumber: this.props.userDashboard.mobileNumber
     };
   }
 
   componentDidMount(){
     const id  = this.props.match.params.id;
-    this.props.getUserTransactionById(id).then(res=>{console.log(res)})
+    this.props.getUserTransactionById(id).then(res=>{
+      this.setState({
+        mobileNumber:this.props.userDashboard.mobileNumber,
+        referenceNumber:this.props.userDashboard.referenceNumber
+      });
+    })
   };
 
   onApprove = () => {
-    const id  = this.props.match.params.id;
-    this.props.updateUserTransactionById(id,"Approve", this.state.receiptNumber, this.state.branchId).then((res)=>{
-      if(res.error){
-        Swal(
-          'มีบางอย่างผิดพลาด เลขสัญญาอาจจะซ้ำ',
-          'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
-          'error'
-        );
-      }else if(res.payload.status === 200){
-        Swal(
-          'บันทึกข้อมูลเรียบร้อยแล้ว',
-          'ข้อมูลที่ท่านบันทึกจะอยู่ในระบบของเรา',
-          'success'
-        );
-        setTimeout(function(){window.location.replace(`/dashboard`)}, 2000)
-      }
-    })
+    let redeemCode = '';
+    try{
+      const id  = this.props.match.params.id;
+        this.props.countApproveUser().then((res)=> {
+          if(res.error){
+            Swal(
+              'มีบางอย่างผิดพลาด ไม่สามารถดึงข้อมูลส่วนลดได้',
+              'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+              'error'
+            );
+          }else if(res.payload.status === 200){
+            this.props.getRedeemCodeFromId((res.payload.data+1)).then((res)=>{
+              if(res.error){
+                Swal(
+                  'มีบางอย่างผิดพลาด ไม่สามารถดึงข้อมูลส่วนลดได้',
+                  'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+                  'error'
+                );
+              }else if (res.payload.status === 200){
+                redeemCode = res.payload.data.codeRedeem;
+                console.log(redeemCode);
+                this.props.mapUserTransactionWithRedeemCode(id,res.payload.data.id).then((res) => {
+                  if(res.error) {
+                    Swal(
+                      'มีบางอย่างผิดพลาด ใบเสร็จใบนี้อาจจะได้รับโค้ดส่วนลดแล้ว',
+                      'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+                      'error'
+                    );
+                  }else if (res.payload.status === 200){
+                    this.props.updateUserTransactionById(id,"Approve", this.state.receiptNumber, this.state.branchId).then((res)=>{
+                      if(res.error){
+                        Swal(
+                          'มีบางอย่างผิดพลาด',
+                          'ข้อมูลที่ท่านบันทึกจะไม่ได้อยู่ในระบบของเรา',
+                          'error'
+                        );
+                      }else if(res.payload.status === 200){
+                        this.props.sendSMSToUserTransactionWhenApprove(this.state.mobileNumber,this.state.referenceNumber,redeemCode).then((res)=>{
+                          console.log(res);
+                          Swal(
+                            'บันทึกข้อมูลเรียบร้อยแล้ว',
+                            'ข้อมูลที่ท่านบันทึกจะอยู่ในระบบของเรา',
+                            'success'
+                          );
+                        });
+                        // setTimeout(function(){window.location.replace(`/dashboard`)}, 2000)
+                      }
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+    }catch(error){
+      console.log(error);
+    }
   };
 
   onReject = () => {
@@ -57,13 +105,18 @@ class RedeemPage extends Component {
     })
   };
 
+  onBack = () => {
+    window.location.replace(`/dashboard`)
+    // setTimeout(function(){window.location.replace(`/dashboard`)}, 500);
+  };
+
   render() {
-    console.log(this.props.userDashboard , this.state);
+    console.log(this.state);
     return(
       <div className="container">
         <div className="row">
           <div className="col-md-6">
-            <img src={this.props.userDashboard.imageLink} alt={this.props.userDashboard.id} width="500"/>
+            <ExifOrientationImg src={this.props.userDashboard.imageLink} alt={this.props.userDashboard.id} width="500"/>
           </div>
           <div className="col-md-6">
             <div className="col-md-12">
@@ -96,7 +149,7 @@ class RedeemPage extends Component {
         <center>
           <button type="button" className="btn btn-success" onClick={this.onApprove}> Approve </button>
           <button type="button" className="btn btn-danger" onClick={this.onReject}> Reject </button>
-          <button type="button" className="btn btn-primary"> Back </button>
+          <button type="button" className="btn btn-primary" onClick={this.onBack}> Back </button>
         </center>
       </div>
     )
@@ -107,4 +160,4 @@ const mapStateToProps = (userDashboard) =>{
   return userDashboard;
 };
 
-export default connect(mapStateToProps,actions)(RedeemPage)
+export default requireAuth(connect(mapStateToProps,actions)(RedeemPage))

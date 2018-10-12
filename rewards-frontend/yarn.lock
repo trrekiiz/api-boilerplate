@@ -2501,6 +2501,14 @@ execa@^0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
+exif-js@^2.2.1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/exif-js/-/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
+
+exif2css@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/exif2css/-/exif2css-1.2.0.tgz#8438e116921508e3dcc30cbe2407b1d5535e1b45"
+
 expand-brackets@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-0.1.5.tgz#df07284e342a807cd733ac5af72411e581d1177b"
@@ -5500,7 +5508,7 @@ querystring-es3@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
 
-querystring@0.2.0:
+querystring@0.2.0, querystring@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
@@ -5596,6 +5604,17 @@ react-dom@^16.5.2:
 react-error-overlay@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.1.tgz#417addb0814a90f3a7082eacba7cee588d00da89"
+
+react-exif-orientation-img@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-exif-orientation-img/-/react-exif-orientation-img-0.1.5.tgz#637a64a069e26175c6dfac8133d36e42590fdd40"
+  dependencies:
+    exif-js "^2.2.1"
+    exif2css "^1.2.0"
+
+react-facebook-login@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-facebook-login/-/react-facebook-login-4.1.0.tgz#44492e60a17dc337438bc971b7ee04b96965b6e4"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"

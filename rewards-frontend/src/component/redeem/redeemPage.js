@@ -8,9 +8,14 @@ import { reduxForm , Field } from 'redux-form';
 const generateId =  Math.random().toString(36).substr(2, 9);
 class RedeemPage extends Component {
 
+  componentDidMount = () => {
+    this.handleInitialize()
+  };
+
   onSubmit(values) {
     const formData = new FormData();
-    formData.append('file', this.state.file[0]);
+    console.log(this.state);
+    formData.append('image', this.state.file[0]);
     this.props.uploadPhotoTransaction(formData).then(res => {
       if(res.error){
         Swal(
@@ -27,11 +32,18 @@ class RedeemPage extends Component {
               'error'
             )
           }else{
-            Swal(
-              'บันทึกข้อมูลเรียบร้อยแล้ว',
-              `กรุณารอการตรวจสอบจากพนักงาน หากข้อมูลถูกต้องทางเราจะส่งส่วนลดไปทางเบอร์โทรศัพท์ (ref : ${generateId})`,
-              'success'
-            )
+            Swal({
+              title: `ขอบคุณที่ร่วมรายการกับเรา`,
+              text: `กรุณารอการตรวจสอบจากพนักงาน หากข้อมูลถูกต้องทางเราจะส่งส่วนลดไปทางเบอร์โทรศัพท์ (ref : ${generateId})`,
+              type: `success`,
+              confirmButtonColor: `#3085d6`,
+              confirmButtonText: `ตกลง`
+            }).then((result) => {
+              if (result.value) {
+                setTimeout(function(){window.location.replace(`/`)}, 1000);
+              }
+            })
+            ;
           }
         })
       }
@@ -39,7 +51,20 @@ class RedeemPage extends Component {
   };
 
   handleFileUpload = (event) => {
+    event.preventDefault();
     this.setState({file: event.target.files});
+  };
+
+  handleInitialize = () => {
+    let name = !this.props.location.state?"":this.props.location.state.name;
+    let subStringName;
+    subStringName = [name.split(" ")[0]];
+    subStringName.push(name.substr(name.split(" ")[0].length).trim());
+    const initData = {
+      "firstName": subStringName[0],
+      "lastName" : subStringName[1]
+    };
+    this.props.initialize(initData);
   };
 
   render() {
@@ -67,7 +92,7 @@ class RedeemPage extends Component {
                 <div className="col-md-12">
                   <div className="form-group">
                     <label>Upload</label>
-                    <input type="file" className="form-control-file" onChange={this.handleFileUpload}/>
+                    <input type="file" className="form-control-file" accept="image/*" onChange={this.handleFileUpload}/>
                   </div>
                 </div>
               </div>
@@ -75,6 +100,7 @@ class RedeemPage extends Component {
                 <center><button type="submit" className="btn btn-primary"> Submit </button></center>
               </div> 
             </form>
+            {console.log(this.state)}
           </div>
         </div>
       </div>
